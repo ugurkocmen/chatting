@@ -23,9 +23,13 @@ SERVER_SOCKET.listen()
 CLIENT_LIST = []
 USERNAME_LIST = []
 
+# sends a message to all CLIENT in the CLIENT_LIST.
+
 def broadcast(MESSAGE):
     for CLIENT in CLIENT_LIST:
         CLIENT.send(MESSAGE)
+
+# receives the message from the CLIENT and sends it to the broadcast function.
 
 def handle(CLIENT):
     while True:
@@ -40,6 +44,8 @@ def handle(CLIENT):
             USERNAME_LIST.remove(USERNAME)
             break
 
+# Accepts connections. Clients join the server.
+            
 def receive():
     while True:
         CLIENT, ADDRESS = SERVER_SOCKET.accept()
@@ -54,8 +60,8 @@ def receive():
         broadcast(f'{USERNAME} Joined The Chat! Welcome!'.encode('utf-8)'))
         CLIENT.send("Connected To The Server!".encode('utf-8'))
 
-        thread = threading.Thread(target=handle, args=(CLIENT, ))
-        thread.start()
+        thread = threading.Thread(target=handle, args=(CLIENT, )) # Used to connect customers at the same time.
+        thread.start()                                            # Customers will send messages, we have to process them.
 
 print("Server Is Listening...")
 receive()
