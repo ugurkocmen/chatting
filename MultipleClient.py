@@ -16,12 +16,13 @@ import threading
 
 HOST = "127.0.0.1"
 PORT = 7777
+ADDR = (HOST,PORT)
 USERNAME = input('Choose A Username : ')
 
 CLIENT_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-CLIENT_SOCKET.connect((HOST,PORT))
+CLIENT_SOCKET.connect((ADDR))
 
-def receive():
+def take():
     while True:
         try:
             MESSAGE = CLIENT_SOCKET.recv(1024).decode('utf-8')
@@ -34,13 +35,13 @@ def receive():
             CLIENT_SOCKET.close()
             break
 
-def write():
+def chat():
     while True:
         MESSAGE = f'[{USERNAME}] : {input("")}'
         CLIENT_SOCKET.send(MESSAGE.encode('utf-8'))
 
-RECEIVE_THREAD = threading.Thread(target=receive)
+RECEIVE_THREAD = threading.Thread(target=take)
 RECEIVE_THREAD.start()
 
-WRITE_THREAD = threading.Thread(target=write)
+WRITE_THREAD = threading.Thread(target=chat)
 WRITE_THREAD.start()
