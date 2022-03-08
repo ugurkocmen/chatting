@@ -8,6 +8,7 @@ You need choose a username for users. If you do it, you can use it. When you cho
 The server will forward all the messages to your screen for you.
 
 Developer : Uğur Koçmen
+
 '''
 
 import socket
@@ -15,6 +16,7 @@ import threading
 
 HOST = "127.0.0.1"
 PORT = 7777
+ADDR = (HOST,PORT)
 
 SERVER_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 SERVER_SOCKET.bind((HOST,PORT))
@@ -46,7 +48,7 @@ def handle(CLIENT):
 
 # Accepts connections. Clients join the server.
             
-def receive():
+def take():
     while True:
         CLIENT, ADDRESS = SERVER_SOCKET.accept()
         print(f'Connected With {str(ADDRESS)}')
@@ -64,4 +66,4 @@ def receive():
         thread.start()                                            # Customers will send messages, we have to process them.
 
 print("Server Is Listening...")
-receive()
+take()
