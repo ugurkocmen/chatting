@@ -27,8 +27,9 @@ USERNAME_LIST = []
 
 # sends a message to all CLIENT in the CLIENT_LIST.
 
-def broadcast(MESSAGE):
+def broadcast(MESSAGE, SENDER):
     for CLIENT in CLIENT_LIST:
+        if CLIENT == SENDER: continue
         CLIENT.send(MESSAGE)
 
 # receives the message from the CLIENT and sends it to the broadcast function.
@@ -62,8 +63,8 @@ def take():
         broadcast(f'{USERNAME} Joined The Chat! Welcome!'.encode('utf-8)'))
         CLIENT.send("Connected To The Server!".encode('utf-8'))
 
-        thread = threading.Thread(target=handle, args=(CLIENT, )) # Used to connect customers at the same time.
-        thread.start()                                            # Customers will send messages, we have to process them.
+        thread = threading.Thread(target=handle, args=(CLIENT, ), daemon=True) # Used to connect customers at the same time.
+        thread.start()                                                         # Customers will send messages, we have to process them.
 
 print("Server Is Listening...")
 take()
