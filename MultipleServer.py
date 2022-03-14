@@ -13,13 +13,22 @@ Developer : Uğur Koçmen
 
 import socket
 import threading
+import logging
 
+logging.basicConfig(
+    filename="logfile.txt",
+    format="%(asctime)s - %(levelname)s - %(message)s ",
+    filemode="w",
+    level=logging.DEBUG)
+
+
+LOGGER = logging.getLogger()
 HOST = "127.0.0.1"
 PORT = 7777
 ADDR = (HOST,PORT)
 
 SERVER_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-SERVER_SOCKET.bind((HOST,PORT))
+SERVER_SOCKET.bind((ADDR))
 SERVER_SOCKET.listen()
 
 CLIENT_LIST = []
@@ -37,6 +46,7 @@ def handle(CLIENT):
     while True:
         try:
             MESSAGE = CLIENT.recv(1024)
+            LOGGER.info(MESSAGE)
             broadcast(MESSAGE)
         except:
             INDEX = CLIENT_LIST.index(CLIENT)
@@ -62,8 +72,9 @@ def take():
         broadcast(f'{USERNAME} Joined The Chat! Welcome!'.encode('utf-8)'))
         CLIENT.send("Connected To The Server!".encode('utf-8'))
 
-        thread = threading.Thread(target=handle, args=(CLIENT, )) # Used to connect customers at the same time.
-        thread.start()                                            # Customers will send messages, we have to process them.
+        thread = threading.Thread(target=handle, args=(CLIENT, )) # Used to connect clients at the same time.
+        thread.start()                                            # Clients will send messages, we have to process them.
+
 
 print("Server Is Listening...")
 take()
