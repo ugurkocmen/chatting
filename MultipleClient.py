@@ -20,7 +20,11 @@ ADDR = (HOST,PORT)
 USERNAME = input('Choose A Username : ')
 
 CLIENT_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-CLIENT_SOCKET.connect((ADDR))
+try:
+    CLIENT_SOCKET.connect((ADDR))
+except ConnectionRefusedError:
+    print("Couldn't connect to the server because it's down")
+    exit()
 
 def take():
     while True:
